@@ -45,12 +45,14 @@ html = '''\
 body {
     font-family: Verdana, sans-serif;
 }
-table, th, td {
+table, td {
     border: 2px solid grey;
     border-radius: 5px;
     padding: 10px;
     margin: 5px;
-    width: 100%;
+}
+td {
+    width: 40%;
 }
 img {
     display: block;
