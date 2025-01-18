@@ -50,7 +50,7 @@ table, th, td {
     border-radius: 5px;
     padding: 10px;
     margin: 5px;
-    width: 50%;
+    width: 100%;
 }
 img {
     display: block;
@@ -60,7 +60,7 @@ img {
 </head>
     <body>
         <h2>Das Wetter in '''+str(location)+''' für '''+str(weekday)+'''</h2>
-        <div style="width:50%;border:2px solid grey; border-radius: 5px; margin: 5px">
+        <div style="width:100%;border:2px solid grey; border-radius: 5px; margin: 5px">
             <img src="https:'''+str(weather['icon'])+'''" alt="weather icon">
         </div>
         <table>
