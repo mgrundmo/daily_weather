@@ -59,3 +59,100 @@ def moon(phase_en):
     }
     phase_de = moon_phases[phase_en]
     return phase_de
+
+def email_text(weather, location, weekday):
+    moon_phase_de = moon(weather['moon_phase'])
+
+    text = f"Das Wetter in {location} am {weekday}\n\n\
+    Hoechsttemperatur: {weather['temp_high']}C\n\
+    Tiefsttemperatur:  {weather['temp_low']}C\n\
+    Aussichten: {weather['condition']}\n\
+    Regen:  {weather['rain']} l/m2\n\
+    Schnee: {weather['snow']} cm\n\
+    ------------------------\n\
+    Sonnenaufgang:   {weather['sunrise']}\n\
+    Sonnenuntergang: {weather['sunset']}\n\
+    ------------------------\n\
+    Mondaufgang:     {weather['moonrise']}\n\
+    Monduntergang:   {weather['moonset']}\n\
+    Mondphase: {moon_phase_de}"
+    return(text)
+
+def email_html(weather, location, weekday):
+    moon_phase_de = moon(weather['moon_phase'])
+    html = '''\
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                body {
+                    font-family: Verdana, sans-serif;
+                }
+                table, th, td {
+                    border: 2px solid grey;
+                    border-radius: 5px;
+                    padding: 10px;
+                    margin: 5px;
+                    width: 50%;
+                }
+                img {
+                    display: block;
+                    margin: auto;
+                }
+            </style>
+        </head>
+        <body>
+            <h2>Das Wetter in '''+str(location)+''' für '''+str(weekday)+'''</h2>
+            <div style="width:50%;border:2px solid grey; border-radius: 5px; margin: 5px">
+                <img src="https:'''+str(weather['icon'])+'''" alt="weather icon">
+            </div>
+            <table>
+                <tr>
+                    <td>Höchsttemperatur:</td>
+                    <td>'''+str(weather['temp_high'])+''' °C</td>
+                </tr>
+                <tr>
+                    <td>Tiefsttemperatur:</td>
+                    <td>'''+str(weather['temp_low'])+''' °C</td>
+                </tr>
+                <tr>
+                    <td>Aussichten:</td>
+                    <td>'''+str(weather['condition'])+'''</td>
+                </tr>
+                <tr>
+                    <td>Regen:</td>
+                    <td>'''+str(weather['rain'])+''' l/m²</td>
+                </tr>
+                <tr>
+                    <td>Schnee:</td>
+                    <td>'''+str(weather['snow'])+''' cm</td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>Sonnenaufgang:</td>
+                    <td>'''+str(weather['sunrise'])+'''</td>
+                </tr>
+                <tr>
+                    <td>Sonnenuntergang:</td>
+                    <td>'''+str(weather['sunset'])+'''</td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>Mondaufgang:</td>
+                    <td>'''+str(weather['moonrise'])+'''</td>
+                </tr>
+                <tr>
+                    <td>Monduntergang:</td>
+                    <td>'''+str(weather['moonset'])+'''</td>
+                </tr>
+                <tr>
+                    <td>Mondphase:</td>
+                    <td>'''+str(moon_phase_de)+'''</td>
+                </tr>
+            </table>
+        </body>
+    </html>    
+    '''
+    return(html)
