@@ -48,11 +48,11 @@ for adresse in adresses:
         msg.attach(part1)
         msg.attach(part2)
 
-        #server = smtplib.SMTP("smtp.gmail.com", 587)
-        #server.ehlo()
-        #server.starttls()
-        #server.login(email, "xmtnrolasszlaihl")
-        #server.sendmail(email, receiver_email, msg.as_string())
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.ehlo()
+        server.starttls()
+        server.login(email, "xmtnrolasszlaihl")
+        server.sendmail(email, receiver_email, msg.as_string())
         print("Email has been sent to " + receiver_email)
 
 #server.quit()
