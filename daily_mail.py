@@ -55,4 +55,4 @@ for adresse in adresses:
         server.sendmail(email, receiver_email, msg.as_string())
         print("Email has been sent to " + receiver_email)
 
-#server.quit()
+server.quit()
