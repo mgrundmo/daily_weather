@@ -11,7 +11,7 @@ receiver_email = "mgrundmo@gmx.de"
 location = "Hürth"
 
 # list of adresses
-adresses = [{'email': 'mgrundmo@gmx.de', 'location': 'Hürth'}, {'email': 'michael.grund@gmx.org', 'location': 'Bangkok'}, {'email': 'sissi-michael@gmx.de', 'location': 'Sürth'}]
+adresses = [{'email': 'mgrundmo@gmx.de', 'location': 'Hürth'}, {'email': 'philippcolonia@gmail.com', 'location': 'Bangkok'}, {'email': 'cedric.riechers@web.de', 'location': 'Sürth'}]
 
 #getting todays date and weekday
 today = date.today()
