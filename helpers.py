@@ -1,6 +1,6 @@
 import requests
 
-from datetime import date
+from datetime import datetime
 
 def forecast_weather(location):
     """Look up weather data for location."""
@@ -20,9 +20,13 @@ def forecast_weather(location):
         rain = day_forecast[0]["day"]["totalprecip_mm"]
         snow = day_forecast[0]["day"]["totalsnow_cm"]
         sunrise = day_forecast[0]["astro"]["sunrise"]
+        sunrise = timeconverter(sunrise)
         sunset = day_forecast[0]["astro"]["sunset"]
+        sunset = timeconverter(sunset)
         moonrise = day_forecast[0]["astro"]["moonrise"]
+        moonrise = timeconverter(moonrise)
         moonset = day_forecast[0]["astro"]["moonset"]
+        moonset = timeconverter(moonset)
         moon_phase = day_forecast[0]["astro"]["moon_phase"]
         
         weather = {
@@ -156,3 +160,14 @@ def email_html(weather, location, weekday):
     </html>    
     '''
     return(html)
+
+def timeconverter(time_12h):
+    hour = time_12h[:2]
+    minute = time_12h[2:-3]
+    am_pm = time_12h[-2:]
+    if am_pm == 'PM':
+        num = int(hour) + 12
+        hour = str(num)
+        print(num)
+    time_24h = hour + minute
+    return time_24h
