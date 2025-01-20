@@ -7,8 +7,8 @@ from email.mime.text import MIMEText
 from helpers import forecast_weather, moon, email_text, email_html
 
 email = "mgrundmo@gmail.com"
-receiver_email = "mgrundmo@gmx.de"
-location = "Hürth"
+#receiver_email = "mgrundmo@gmx.de"
+#location = "Hürth"
 
 # list of adresses
 adresses = [
@@ -24,7 +24,6 @@ weekday = today.strftime("%A, %d %B %Y")
 for adresse in adresses:
     for i in range(0, len(adresse), 2):
         receiver_email = adresse['email']
-        print(receiver_email)
         location = adresse['location']
         weather = forecast_weather(location)
         moon_phase_de = moon(weather['moon_phase'])
@@ -53,6 +52,6 @@ for adresse in adresses:
         server.starttls()
         server.login(email, "xmtnrolasszlaihl")
         server.sendmail(email, receiver_email, msg.as_string())
-        print("Email has been sent to " + receiver_email)
+        print("Email has been sent to " + receiver_email + "\n")
 
 server.quit()

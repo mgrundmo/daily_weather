@@ -168,6 +168,5 @@ def timeconverter(time_12h):
     if am_pm == 'PM':
         num = int(hour) + 12
         hour = str(num)
-        print(num)
     time_24h = hour + minute
     return time_24h
