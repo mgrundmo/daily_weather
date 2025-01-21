@@ -19,6 +19,13 @@ def forecast_weather(location):
         icon = day_forecast[0]["day"]["condition"]["icon"]
         rain = day_forecast[0]["day"]["totalprecip_mm"]
         snow = day_forecast[0]["day"]["totalsnow_cm"]
+        wind = day_forecast[0]["day"]["maxwind_kph"]
+        if snow > 0:
+            snow_wind = str(snow) +" cm"
+            snow_wind_lbl = "Schnee"
+        else:
+            snow_wind = str(wind) +" km/h"
+            snow_wind_lbl = "Wind"
         sunrise = day_forecast[0]["astro"]["sunrise"]
         sunrise = timeconverter(sunrise)
         sunset = day_forecast[0]["astro"]["sunset"]
@@ -40,7 +47,8 @@ def forecast_weather(location):
             "condition": condition,
             "icon":icon,
             "rain": rain,
-            "snow": snow,
+            "snow_wind": snow_wind,
+            "snow_wind_lbl": snow_wind_lbl,
             "sunrise": sunrise,
             "sunset": sunset,
             "moonrise": moonrise,
@@ -76,7 +84,7 @@ def email_text(weather, location, weekday):
     Tiefsttemperatur:  {weather['temp_low']}C\n\
     Aussichten: {weather['condition']}\n\
     Regen:  {weather['rain']} l/m2\n\
-    Schnee: {weather['snow']} cm\n\
+    {weather['snow_wind_lbl']}: {weather['snow_wind']}\n\
     ------------------------\n\
     Sonnenaufgang:   {weather['sunrise']}\n\
     Sonnenuntergang: {weather['sunset']}\n\
@@ -132,8 +140,8 @@ def email_html(weather, location, weekday):
                     <td>'''+str(weather['rain'])+''' l/m²</td>
                 </tr>
                 <tr>
-                    <td>Schnee:</td>
-                    <td>'''+str(weather['snow'])+''' cm</td>
+                    <td>'''+str(weather['snow_wind_lbl'])+''':</td>
+                    <td>'''+str(weather['snow_wind'])+'''</td>
                 </tr>
             </table>
             <table>
@@ -166,6 +174,7 @@ def email_html(weather, location, weekday):
     return(html)
 
 def timeconverter(time_12h):
+    #converts AM/PM time format into 24h format'
     hour = time_12h[:2]
     minute = time_12h[2:-3]
     am_pm = time_12h[-2:]
