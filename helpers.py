@@ -25,8 +25,12 @@ def forecast_weather(location):
         sunset = timeconverter(sunset)
         moonrise = day_forecast[0]["astro"]["moonrise"]
         moonrise = timeconverter(moonrise)
+        if("No" in moonrise):
+            moonrise = 'Gestern'
         moonset = day_forecast[0]["astro"]["moonset"]
         moonset = timeconverter(moonset)
+        if("No" in moonset):
+            moonset = 'Morgen'
         moon_phase = day_forecast[0]["astro"]["moon_phase"]
         
         weather = {
