@@ -5,7 +5,7 @@ from datetime import datetime
 def forecast_weather(location):
     """Look up weather data for location."""
     key = "b97f0c7e03084663a3d81708242803"
-    url = f"https://api.weatherapi.com/v1/forecast.json?key={key}&q={location}&days=1&aqi=no&alert=yes"
+    url = f"https://api.weatherapi.com/v1/forecast.json?key={key}&q={location}&days=1&aqi=yes&alert=no"
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an error for HTTP error responses
@@ -58,7 +58,7 @@ def moon(phase_en):
         "Waxing Gibbous": "Zuhnemneder Dreiviertelmond",
         "Full": "Vollmond",
         "Waning Gibbous": "abnehmender Dreiviertelmond",
-        "Third Quarter": "Abnehmender Halbmond",
+        "Last Quarter": "Abnehmender Halbmond",
         "Waning Crescent": "Abnehmende Sichel"
     }
     phase_de = moon_phases[phase_en]
