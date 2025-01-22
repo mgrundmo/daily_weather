@@ -13,8 +13,8 @@ email = "mgrundmo@gmail.com"
 # list of adresses
 adresses = [
     {'email': 'mgrundmo@gmx.de','location': 'Hürth'},
-    {'email': 'philippcolonia@gmail.com', 'location': 'Bangkok'},
-    {'email': 'cedric.riechers@web.de','location': 'Sürth'}
+   # {'email': 'philippcolonia@gmail.com', 'location': 'Bangkok'},
+   # {'email': 'cedric.riechers@web.de','location': 'Sürth'}
 ]
 
 #getting todays date and weekday

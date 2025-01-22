@@ -1,6 +1,7 @@
 import requests
 
 from datetime import datetime
+from quickstart import main
 
 def forecast_weather(location):
     """Look up weather data for location."""
@@ -78,6 +79,7 @@ def moon(phase_en):
 
 def email_text(weather, location, weekday):
     moon_phase_de = moon(weather['moon_phase'])
+    wann_spielt_fc = main()
 
     text = f"Das Wetter in {location} am {weekday}\n\n\
     Hoechsttemperatur: {weather['temp_high']}C\n\
@@ -91,13 +93,17 @@ def email_text(weather, location, weekday):
     ------------------------\n\
     Mondaufgang:     {weather['moonrise']}\n\
     Monduntergang:   {weather['moonset']}\n\
-    Mondphase: {moon_phase_de}"
+    Mondphase: {moon_phase_de}\n\
+    Der FC spielt: {wann_spielt_fc}"
     return(text)
 
 def email_html(weather, location, weekday):
     moon_phase_de = moon(weather['moon_phase'])
+    wann_spielt_fc = main()
     html = '''\
     <!DOCTYPE html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <html>
         <head>
             <style>
@@ -105,21 +111,44 @@ def email_html(weather, location, weekday):
                     font-family: Verdana, sans-serif;
                 }
                 table, th, td {
-                    border: 2px solid grey;
+                    border: 1px solid grey;
                     border-radius: 5px;
-                    padding: 10px;
+                    padding: 5px;
                     margin: 5px;
-                    width: 50%;
                 }
+                
                 img {
                     display: block;
                     margin: auto;
                 }
+                .marquee {
+                    overflow: hidden;
+                    position: relative;
+                    height: 25px;
+                    width: 100%;
+                    border: 1px solid grey;
+                    border-radius: 5px;
+                }
+                .marquee p {
+                    position: absolute;
+                    margin: 0;
+                    line-height: 25px;
+                    white-space: nowrap;                   
+                    animation: scroll-left 20s linear infinite;
+                }
+                @keyframes scroll-left {
+                    0% {
+                        transform: translateX(200%);
+                    }
+                    100% {
+                        transform: translateX(-100%);
+                    }
+                }
             </style>
         </head>
         <body>
-            <h2>Das Wetter in '''+str(location)+''' für '''+str(weekday)+'''</h2>
-            <div style="width:50%;border:2px solid grey; border-radius: 5px; margin: 5px">
+            <h2 style="text-align: center;">Das Wetter in '''+str(location)+''' für '''+str(weekday)+'''</h2>
+            <div style="width:50%;border:1px solid grey; border-radius: 5px; margin: 5px">
                 <img src="https:'''+str(weather['icon'])+'''" alt="weather icon">
             </div>
             <table>
@@ -168,6 +197,10 @@ def email_html(weather, location, weekday):
                     <td>'''+str(moon_phase_de)+'''</td>
                 </tr>
             </table>
+            <h3>Wann spielt eigentlich der FC?</h3>
+            <div class="marquee">
+                <p>'''+str(wann_spielt_fc)+'''</p>
+            </div>
         </body>
     </html>    
     '''
