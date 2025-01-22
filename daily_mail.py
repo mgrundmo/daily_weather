@@ -7,8 +7,6 @@ from email.mime.text import MIMEText
 from helpers import forecast_weather, moon, email_text, email_html
 
 email = "mgrundmo@gmail.com"
-#receiver_email = "mgrundmo@gmx.de"
-#location = "Hürth"
 
 # list of adresses
 adresses = [

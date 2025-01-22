@@ -211,7 +211,7 @@ def timeconverter(time_12h):
     hour = time_12h[:2]
     minute = time_12h[2:-3]
     am_pm = time_12h[-2:]
-    if am_pm == 'PM':
+    if am_pm == 'PM' and int(hour) < 12:
         num = int(hour) + 12
         hour = str(num)
     if am_pm == 'AM' and hour == '12':
