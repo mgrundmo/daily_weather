@@ -10,8 +10,7 @@ from googleapiclient.errors import HttpError
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/calendar.events.readonly"]
 
-
-def main():
+def calendar():
   """Shows basic usage of the Google Calendar API.
   Prints the start and name of the next 10 events on the user's calendar.
   """
@@ -72,5 +71,3 @@ def main():
 
   except HttpError as error:
     print(f"An error occurred: {error}")
-if __name__ == "__main__":
-  main()

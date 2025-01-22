@@ -1,7 +1,7 @@
 import requests
 
 from datetime import datetime
-from quickstart import main
+from quickstart import calendar
 
 def forecast_weather(location):
     """Look up weather data for location."""
@@ -79,7 +79,7 @@ def moon(phase_en):
 
 def email_text(weather, location, weekday):
     moon_phase_de = moon(weather['moon_phase'])
-    wann_spielt_fc = main()
+    wann_spielt_fc = calendar()
 
     text = f"Das Wetter in {location} am {weekday}\n\n\
     Hoechsttemperatur: {weather['temp_high']}C\n\
@@ -99,7 +99,7 @@ def email_text(weather, location, weekday):
 
 def email_html(weather, location, weekday):
     moon_phase_de = moon(weather['moon_phase'])
-    wann_spielt_fc = main()
+    wann_spielt_fc = calendar()
     html = '''\
     <!DOCTYPE html>
     <meta charset="UTF-8">
