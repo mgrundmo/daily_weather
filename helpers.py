@@ -12,7 +12,6 @@ def forecast_weather(location):
         response.raise_for_status()  # Raise an error for HTTP error responses
         weather_data = response.json()
         day_forecast = weather_data["forecast"]["forecastday"]
-
         date = day_forecast[0]["date"]
         temp_high = day_forecast[0]["day"]["maxtemp_c"]
         temp_low = day_forecast[0]["day"]["mintemp_c"]
@@ -63,6 +62,34 @@ def forecast_weather(location):
         print(f"Data parsing error: {e}")
     return None
 
+def aqi(location):
+    token = "e58b917a725410fd628f654b02205f90f2f781a4"
+    url = f"https://api.waqi.info/feed/{location}/?token={token}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for HTTP error responses
+        data = response.json()
+        aqi_data = data["data"]["aqi"]
+        if aqi_data < 51:
+            aqi_status = "Gut"
+        elif aqi_data > 50 and aqi_data < 101:
+            aqi_status = "Mäßig"
+        elif aqi_data > 100 and aqi_data < 151:
+            aqi_status = "Ungesund für sensible Gruppen"
+        elif aqi_data > 150 and aqi_data < 201:
+            aqi_status = "Ungesund"
+        elif aqi_data > 200 and aqi_data < 301:
+            aqi_status = "Sehr ungesund"
+        else:
+            aqi_status = "Gefährlich"
+        return(aqi_data, aqi_status)
+    except requests.RequestException as e:
+        print(f"Request error: {e}")
+    except (KeyError, ValueError) as e:
+        print(f"Data parsing error: {e}")
+    return None
+    
+
 def moon(phase_en):
     moon_phases = {
         "New": "Neumond",
@@ -80,6 +107,7 @@ def moon(phase_en):
 def email_text(weather, location, weekday):
     moon_phase_de = moon(weather['moon_phase'])
     wann_spielt_fc = calendar()
+    aqi_data = aqi(location)
 
     text = f"Das Wetter in {location} am {weekday}\n\n\
     Hoechsttemperatur: {weather['temp_high']}C\n\
@@ -87,6 +115,7 @@ def email_text(weather, location, weekday):
     Aussichten: {weather['condition']}\n\
     Regen:  {weather['rain']} l/m2\n\
     {weather['snow_wind_lbl']}: {weather['snow_wind']}\n\
+    Air Quality: {aqi_data}\n\
     ------------------------\n\
     Sonnenaufgang:   {weather['sunrise']}\n\
     Sonnenuntergang: {weather['sunset']}\n\

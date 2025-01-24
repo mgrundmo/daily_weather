@@ -11,8 +11,8 @@ email = "mgrundmo@gmail.com"
 # list of adresses
 adresses = [
     {'email': 'mgrundmo@gmx.de','location': 'Hürth'},
-   # {'email': 'philippcolonia@gmail.com', 'location': 'Bangkok'},
-   # {'email': 'cedric.riechers@web.de','location': 'Sürth'}
+    {'email': 'philippcolonia@gmail.com', 'location': 'Bangkok'},
+    {'email': 'cedric.riechers@web.de','location': 'Cologne'}
 ]
 
 #getting todays date and weekday
@@ -44,7 +44,7 @@ for adresse in adresses:
 
         msg.attach(part1)
         msg.attach(part2)
-        #'''
+        '''
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.ehlo()
         server.starttls()
@@ -53,4 +53,4 @@ for adresse in adresses:
         print("Email has been sent to " + receiver_email + "\n")
 
 server.quit()
-#'''
+'''
