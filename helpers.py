@@ -63,8 +63,8 @@ def forecast_weather(location):
     return None
 
 def aqi(location):
-    token = "e58b917a725410fd628f654b02205f90f2f781a4"
-    url = f"https://api.waqi.info/feed/{location}/?token={token}"
+    key = "e58b917a725410fd628f654b02205f90f2f781a4"
+    url = f"https://api.waqi.info/feed/{location}/?token={key}"
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an error for HTTP error responses
