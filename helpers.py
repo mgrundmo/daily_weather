@@ -70,19 +70,31 @@ def aqi(location):
         response.raise_for_status()  # Raise an error for HTTP error responses
         data = response.json()
         aqi_data = data["data"]["aqi"]
+        if aqi_data > 50 and aqi_data < 151:
+            aqi_text_color = "black"
+            print(aqi_text_color)
+        else:
+            aqi_text_color = "white"   
         if aqi_data < 51:
             aqi_status = "Gut"
+            aqi_color = "#009966"
+
         elif aqi_data > 50 and aqi_data < 101:
             aqi_status = "Mäßig"
+            aqi_color = "#ffde33"
         elif aqi_data > 100 and aqi_data < 151:
             aqi_status = "Ungesund für sensible Gruppen"
+            aqi_color = "#ff9933"
         elif aqi_data > 150 and aqi_data < 201:
             aqi_status = "Ungesund"
+            aqi_color = "#cc0033"
         elif aqi_data > 200 and aqi_data < 301:
             aqi_status = "Sehr ungesund"
+            aqi_color = "#660099"
         else:
             aqi_status = "Gefährlich"
-        return(aqi_data, aqi_status)
+            aqi_color = "#7e0023"
+        return(aqi_data, aqi_status, aqi_color, aqi_text_color)
     except requests.RequestException as e:
         print(f"Request error: {e}")
     except (KeyError, ValueError) as e:
@@ -104,10 +116,9 @@ def moon(phase_en):
     phase_de = moon_phases[phase_en]
     return phase_de
 
-def email_text(weather, location, weekday):
+def email_text(weather, location, weekday, aqi_data):
     moon_phase_de = moon(weather['moon_phase'])
     wann_spielt_fc = calendar()
-    aqi_data = aqi(location)
 
     text = f"Das Wetter in {location} am {weekday}\n\n\
     Hoechsttemperatur: {weather['temp_high']}C\n\
@@ -115,7 +126,7 @@ def email_text(weather, location, weekday):
     Aussichten: {weather['condition']}\n\
     Regen:  {weather['rain']} l/m2\n\
     {weather['snow_wind_lbl']}: {weather['snow_wind']}\n\
-    Air Quality: {aqi_data}\n\
+    Air Quality: {aqi_data[0]} / {aqi_data[1]}\n\
     ------------------------\n\
     Sonnenaufgang:   {weather['sunrise']}\n\
     Sonnenuntergang: {weather['sunset']}\n\
@@ -126,9 +137,10 @@ def email_text(weather, location, weekday):
     Der FC spielt: {wann_spielt_fc}"
     return(text)
 
-def email_html(weather, location, weekday):
+def email_html(weather, location, weekday, aqi_data):
     moon_phase_de = moon(weather['moon_phase'])
     wann_spielt_fc = calendar()
+    
     html = '''\
     <!DOCTYPE html>
     <meta charset="UTF-8">
@@ -145,7 +157,6 @@ def email_html(weather, location, weekday):
                     padding: 5px;
                     margin: 5px;
                 }
-                
                 img {
                     display: block;
                     margin: auto;
@@ -201,6 +212,10 @@ def email_html(weather, location, weekday):
                     <td>'''+str(weather['snow_wind_lbl'])+''':</td>
                     <td>'''+str(weather['snow_wind'])+'''</td>
                 </tr>
+                <tr>
+                    <td>Luftqualität (AQI):</td>
+                    <td style="color: '''+str(aqi_data[3])+'''; background-color: '''+str(aqi_data[2])+''';">'''+str(aqi_data[0])+'''</td>
+
             </table>
             <table>
                 <tr>
