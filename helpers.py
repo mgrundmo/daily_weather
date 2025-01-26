@@ -106,7 +106,25 @@ def last_fc():
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an error for HTTP error responses
-        data = response.json()    
+        fc_data = response.json()
+        date_time = fc_data['matchDateTime']
+        date = date_time[:10]
+        team1_logo = fc_data['team1']['teamIconUrl']
+        team1_name = fc_data['team1']['shortName']
+        team2_logo = fc_data['team2']['teamIconUrl']
+        team2_name = fc_data['team2']['shortName']
+        result1 = fc_data['matchResults'][1]['pointsTeam1']
+        result2 = fc_data['matchResults'][1]['pointsTeam2']
+        last_match_fc = {
+            "date": date,
+            "team1_logo": team1_logo,
+            "team1_name": team1_name,
+            "team2_logo": team2_logo,
+            "team2_name": team2_name,
+            "result1": result1,
+            "result2": result2
+        }
+        return last_match_fc
     except requests.RequestException as e:
         print(f"Request error: {e}")
     except (KeyError, ValueError) as e:
@@ -127,7 +145,7 @@ def moon(phase_en):
     phase_de = moon_phases[phase_en]
     return phase_de
 
-def email_text(weather, location, weekday, aqi_data):
+def email_text(weather, location, weekday, aqi_data, last_match_fc):
     moon_phase_de = moon(weather['moon_phase'])
     wann_spielt_fc = calendar()
 
@@ -145,10 +163,15 @@ def email_text(weather, location, weekday, aqi_data):
     Mondaufgang:     {weather['moonrise']}\n\
     Monduntergang:   {weather['moonset']}\n\
     Mondphase: {moon_phase_de}\n\
-    Der FC spielt: {wann_spielt_fc}"
+    Der FC spielt: {wann_spielt_fc}\n\
+    Der FC hat gespielt:\
+    {last_match_fc['date']}\
+    {last_match_fc['team1_name']}\
+    {last_match_fc['result1']}:{last_match_fc['result2']}\
+    {last_match_fc['team2_name']}"
     return(text)
 
-def email_html(weather, location, weekday, aqi_data):
+def email_html(weather, location, weekday, aqi_data, last_match_fc):
     moon_phase_de = moon(weather['moon_phase'])
     wann_spielt_fc = calendar()
     
@@ -256,6 +279,19 @@ def email_html(weather, location, weekday, aqi_data):
             <div class="marquee">
                 <p>'''+str(wann_spielt_fc)+'''</p>
             </div>
+            <h3>Und wie ist das letzte Spiel am '''+str(last_match_fc['date'])+''' ausgegangen?</h3>
+            <table>
+                <tr>
+                    <td><img src="'''+str(last_match_fc['team1_logo'])+'''" alt="'''+str(last_match_fc['team1_name'])+'''" width="64"></td>
+                    <td rowspan="2">'''+str(last_match_fc['result1'])+'''</td>
+                    <td rowspan="2">'''+str(last_match_fc['result2'])+'''</td>
+                    <td><img src="'''+str(last_match_fc['team2_logo'])+'''" alt="'''+str(last_match_fc['team2_name'])+'''" width="64"></td>
+                </tr>
+                <tr>
+                    <td>'''+str(last_match_fc['team1_name'])+'''</td>
+                    <td>'''+str(last_match_fc['team2_name'])+'''</td>
+                </tr>
+            </table>
         </body>
     </html>    
     '''
