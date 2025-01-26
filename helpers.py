@@ -74,11 +74,11 @@ def aqi(location):
             aqi_text_color = "black"
             print(aqi_text_color)
         else:
-            aqi_text_color = "white"   
+            aqi_text_color = "white"
+
         if aqi_data < 51:
             aqi_status = "Gut"
             aqi_color = "#009966"
-
         elif aqi_data > 50 and aqi_data < 101:
             aqi_status = "Mäßig"
             aqi_color = "#ffde33"
@@ -100,7 +100,18 @@ def aqi(location):
     except (KeyError, ValueError) as e:
         print(f"Data parsing error: {e}")
     return None
-    
+
+def last_fc():
+    url = f"https://api.openligadb.de/getlastmatchbyleagueteam/4755/65"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for HTTP error responses
+        data = response.json()    
+    except requests.RequestException as e:
+        print(f"Request error: {e}")
+    except (KeyError, ValueError) as e:
+        print(f"Data parsing error: {e}")
+    return None
 
 def moon(phase_en):
     moon_phases = {
