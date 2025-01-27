@@ -145,7 +145,13 @@ def moon(phase_en):
     phase_de = moon_phases[phase_en]
     return phase_de
 
-def email_text(weather, location, weekday, aqi_data, last_match_fc):
+def useless_facts():
+    url = f"https://uselessfacts.jsph.pl/api/v2/facts/random"
+    response = requests.get(url)
+    useless_facts = response.json()
+    return useless_facts
+
+def email_text(weather, location, weekday, aqi_data, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
     wann_spielt_fc = calendar()
 
@@ -168,10 +174,11 @@ def email_text(weather, location, weekday, aqi_data, last_match_fc):
     {last_match_fc['date']}\
     {last_match_fc['team1_name']}\
     {last_match_fc['result1']}:{last_match_fc['result2']}\
-    {last_match_fc['team2_name']}"
+    {last_match_fc['team2_name']}\n\
+    Und sonst? {uselessfacts['text']}"
     return(text)
 
-def email_html(weather, location, weekday, aqi_data, last_match_fc):
+def email_html(weather, location, weekday, aqi_data, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
     wann_spielt_fc = calendar()
     
@@ -292,6 +299,8 @@ def email_html(weather, location, weekday, aqi_data, last_match_fc):
                     <td>'''+str(last_match_fc['team2_name'])+'''</td>
                 </tr>
             </table>
+            <h3>Und sonst?</h3>
+            <p>'''+str(uselessfacts['text'])+'''</p>
         </body>
     </html>    
     '''
