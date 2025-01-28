@@ -146,14 +146,14 @@ def moon(phase_en):
     return phase_de
 
 def useless_facts():
-    url = f"https://uselessfacts.jsph.pl/api/v2/facts/random"
+    url = f"https://uselessfacts.jsph.pl/api/v2/facts/random?language=de"
     response = requests.get(url)
     useless_facts = response.json()
     return useless_facts
 
-def email_text(weather, location, weekday, aqi_data, last_match_fc, uselessfacts):
+def email_text(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
-    wann_spielt_fc = calendar()
+    #wann_spielt_fc = calendar()
 
     text = f"Das Wetter in {location} am {weekday}\n\n\
     Hoechsttemperatur: {weather['temp_high']}C\n\
@@ -178,9 +178,9 @@ def email_text(weather, location, weekday, aqi_data, last_match_fc, uselessfacts
     Und sonst? {uselessfacts['text']}"
     return(text)
 
-def email_html(weather, location, weekday, aqi_data, last_match_fc, uselessfacts):
+def email_html(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
-    wann_spielt_fc = calendar()
+    #wann_spielt_fc = calendar()
     
     html = '''\
     <!DOCTYPE html>

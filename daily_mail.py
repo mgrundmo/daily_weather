@@ -5,6 +5,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from helpers import forecast_weather, moon, email_text, email_html, aqi, last_fc, useless_facts
+from quickstart import calendar
 
 email = "mgrundmo@gmail.com"
 
@@ -18,6 +19,9 @@ adresses = [
 #getting todays date and weekday
 today = date.today()
 weekday = today.strftime("%A, %d %B %Y")
+
+#getting information of next FC match
+wann_spielt_fc = calendar()
 
 #getting result of last FC match
 last_match_fc = last_fc()
@@ -34,11 +38,11 @@ for adresse in adresses:
         moon_phase_de = moon(weather['moon_phase'])
         
         #plain text email as backup
-        text = email_text(weather, location, weekday, aqi_data, last_match_fc, uselessfacts)
+        text = email_text(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts)
         print(text)
 
         #html email as primary
-        html = email_html(weather, location, weekday, aqi_data, last_match_fc, uselessfacts)
+        html = email_html(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts)
 
         #creating header of email
         msg = MIMEMultipart('alternative')
