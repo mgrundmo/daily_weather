@@ -133,11 +133,11 @@ def last_fc():
 
 def moon(phase_en):
     moon_phases = {
-        "New": "Neumond",
+        "New Moon": "Neumond",
         "Waxing Crescent": "Zunehmende Sichel",
         "First Quarter": "Zunehmender Halbmond",
         "Waxing Gibbous": "Zuhnemneder Dreiviertelmond",
-        "Full": "Vollmond",
+        "Full Moon": "Vollmond",
         "Waning Gibbous": "abnehmender Dreiviertelmond",
         "Last Quarter": "Abnehmender Halbmond",
         "Waning Crescent": "Abnehmende Sichel"
