@@ -133,11 +133,11 @@ def last_fc():
 
 def moon(phase_en):
     moon_phases = {
-        "New": "Neumond",
+        "New Moon": "Neumond",
         "Waxing Crescent": "Zunehmende Sichel",
         "First Quarter": "Zunehmender Halbmond",
         "Waxing Gibbous": "Zuhnemneder Dreiviertelmond",
-        "Full": "Vollmond",
+        "Full Moon": "Vollmond",
         "Waning Gibbous": "abnehmender Dreiviertelmond",
         "Last Quarter": "Abnehmender Halbmond",
         "Waning Crescent": "Abnehmende Sichel"
@@ -151,9 +151,16 @@ def useless_facts():
     useless_facts = response.json()
     return useless_facts
 
-def email_text(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
+def email_text(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
-    #wann_spielt_fc = calendar()
+    if my_cal:
+        text_a = f"Die nächsten Termine: {my_cal[0]}\n\
+                          {my_cal[1]}\n\
+                          {my_cal[2]}\n\
+                          {my_cal[3]}\n\
+                          {my_cal[4]}"
+    else:
+        text_a = " "
 
     text = f"Das Wetter in {location} am {weekday}\n\n\
     Hoechsttemperatur: {weather['temp_high']}C\n\
@@ -169,6 +176,7 @@ def email_text(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_
     Mondaufgang:     {weather['moonrise']}\n\
     Monduntergang:   {weather['moonset']}\n\
     Mondphase: {moon_phase_de}\n\
+    {text_a}\n\
     Der FC spielt: {wann_spielt_fc}\n\
     Der FC hat gespielt:\
     {last_match_fc['date']}\
@@ -178,10 +186,19 @@ def email_text(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_
     Und sonst? {uselessfacts['text']}"
     return(text)
 
-def email_html(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
+def email_html(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
     #wann_spielt_fc = calendar()
-    
+    if my_cal:
+        table_vis = 'table'
+        entry_1 = my_cal[0]
+        entry_2 = my_cal[1]
+        entry_3 = my_cal[2]
+        entry_4 = my_cal[3]
+        entry_5 = my_cal[4]
+    else:
+        table_vis = 'table hidden'
+        entry_1, entry_2, entry_3, entry_4, entry_5 = ""
     html = '''\
     <!DOCTYPE html>
     <meta charset="UTF-8">
@@ -280,6 +297,26 @@ def email_html(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_
                 <tr>
                     <td>Mondphase:</td>
                     <td>'''+str(moon_phase_de)+'''</td>
+                </tr>
+            </table>
+            <'''+str(table_vis)+'''>
+                <tr>
+                    <th>Die nächsten Termine</th>
+                </tr>
+                <tr>
+                    <td>'''+str(entry_1)+'''</td>
+                </tr>
+                <tr>
+                    <td>'''+str(entry_2)+'''</td>
+                </tr>
+                <tr>
+                    <td>'''+str(entry_3)+'''</td>
+                </tr>
+                <tr>
+                    <td>'''+str(entry_4)+'''</td>
+                </tr>
+                <tr>
+                    <td>'''+str(entry_5)+'''</td>
                 </tr>
             </table>
             <h3>Wann spielt eigentlich der FC?</h3>

@@ -11,17 +11,14 @@ email = "mgrundmo@gmail.com"
 
 # list of adresses
 adresses = [
-    {'email': 'mgrundmo@gmx.de','location': 'Hürth'},
-    {'email': 'philippcolonia@gmail.com', 'location': 'Bangkok'},
-    {'email': 'cedric.riechers@web.de','location': 'Cologne'}
+    {'email': 'mgrundmo@gmx.de','location': 'Hürth', 'detailed_cal': True},
+   # {'email': 'philippcolonia@gmail.com', 'location': 'Bangkok', 'detailed_cal': False},
+   # {'email': 'cedric.riechers@web.de','location': 'Cologne', 'detailed_cal': False}
 ]
 
 #getting todays date and weekday
 today = date.today()
 weekday = today.strftime("%A, %d %B %Y")
-
-#getting information of next FC match
-wann_spielt_fc = calendar()
 
 #getting result of last FC match
 last_match_fc = last_fc()
@@ -30,19 +27,22 @@ last_match_fc = last_fc()
 uselessfacts = useless_facts()
 
 for adresse in adresses:
-    for i in range(0, len(adresse), 2):
+    for i in range(0, len(adresse), 3):
         receiver_email = adresse['email']
         location = adresse['location']
+        detailed_cal = adresse['detailed_cal']
+        #getting information of next FC match and personal calender if "detailed_cal = True"      
+        wann_spielt_fc, my_cal = calendar(detailed_cal)
         weather = forecast_weather(location)
         aqi_data = aqi(location)
         moon_phase_de = moon(weather['moon_phase'])
         
         #plain text email as backup
-        text = email_text(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts)
+        text = email_text(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts)
         print(text)
 
         #html email as primary
-        html = email_html(weather, location, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts)
+        html = email_html(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts)
 
         #creating header of email
         msg = MIMEMultipart('alternative')
