@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 from helpers import forecast_weather, moon, email_text, email_html, aqi, last_fc, useless_facts
 from quickstart import calendar
 
+#sender email
 email = "mgrundmo@gmail.com"
 
 # list of adresses
@@ -29,17 +30,21 @@ uselessfacts = useless_facts()
 for adresse in adresses:
     for i in range(0, len(adresse), 4):
         receiver_email = adresse['email']
-        #preparing geo data for weather api#
+        #preparing geo data for weather api and request data
         location = str(adresse['lat']) + "," + str(adresse['lng'])
-        detailed_cal = adresse['detailed_cal']
-        #getting information of next FC match and personal calender if "detailed_cal = True"      
+        weather = forecast_weather(location)      
+        moon_phase_de = moon(weather['moon_phase'])
+
+        #getting information of next FC match and personal calender if "detailed_cal = True"  
+        detailed_cal = adresse['detailed_cal']         
         wann_spielt_fc, my_cal = calendar(detailed_cal)
-        weather = forecast_weather(location)
+
+        #preparing geo data for AQI request and get data
         lat = adresse['lat']
         lng = adresse['lng']
         aqi_data = aqi(lat, lng)
-        moon_phase_de = moon(weather['moon_phase'])
         
+        #prepare emails
         #plain text email as backup
         text = email_text(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts)
         print(text)
@@ -59,6 +64,7 @@ for adresse in adresses:
         msg.attach(part1)
         msg.attach(part2)
         #'''
+        #sending email
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.ehlo()
         server.starttls()
