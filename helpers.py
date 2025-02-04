@@ -198,7 +198,7 @@ def email_html(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, las
         entry_5 = my_cal[4]
     else:
         table_vis = 'table hidden'
-        entry_1, entry_2, entry_3, entry_4, entry_5 = ""
+        entry_1, entry_2, entry_3, entry_4, entry_5 = ' ', ' ', ' ', ' ', ' '
     html = '''\
     <!DOCTYPE html>
     <meta charset="UTF-8">

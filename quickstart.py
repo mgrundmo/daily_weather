@@ -69,13 +69,13 @@ def cal(service, id, results):
       .execute()
   )
   events = events_result.get("items", [])
+  cal_list =[]  
   if not events:
     print("No upcoming events found.")
     cal_entry = "Erstmal nicht"
     return cal_entry
 
     # Prints the start and name of the next event
-  cal_list =[]  
   for event in events:
     start = event["start"].get("dateTime", event["start"].get("date"))
     year = start[:4]
