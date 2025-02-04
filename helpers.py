@@ -62,12 +62,15 @@ def forecast_weather(location):
         print(f"Data parsing error: {e}")
     return None
 
-def aqi(location):
+def aqi(lat, lng):
+    #preparing url for api request
     key = "e58b917a725410fd628f654b02205f90f2f781a4"
+    location = f"geo:{lat};{lng}"
     url = f"https://api.waqi.info/feed/{location}/?token={key}"
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an error for HTTP error responses
+        #receiving data from api server
         data = response.json()
         aqi_data = data["data"]["aqi"]
         if aqi_data > 50 and aqi_data < 151:

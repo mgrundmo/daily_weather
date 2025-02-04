@@ -11,9 +11,9 @@ email = "mgrundmo@gmail.com"
 
 # list of adresses
 adresses = [
-    {'email': 'mgrundmo@gmx.de','location': 'Hürth', 'detailed_cal': True},
-    {'email': 'philippcolonia@gmail.com', 'location': 'Bangkok', 'detailed_cal': False},
-    {'email': 'cedric.riechers@web.de','location': 'Cologne', 'detailed_cal': False}
+    {'email': 'mgrundmo@gmx.de','lat': 50.891120, 'lng': 6.910415, 'detailed_cal': True},
+    {'email': 'philippcolonia@gmail.com', 'lat': 13.713353, 'lng': 100.505084, 'detailed_cal': False},
+    {'email': 'cedric.riechers@web.de','lat': 50.868795, 'lng': 7.004098, 'detailed_cal': False}
 ]
 
 #getting todays date and weekday
@@ -27,14 +27,17 @@ last_match_fc = last_fc()
 uselessfacts = useless_facts()
 
 for adresse in adresses:
-    for i in range(0, len(adresse), 3):
+    for i in range(0, len(adresse), 4):
         receiver_email = adresse['email']
-        location = adresse['location']
+        #preparing geo data for weather api#
+        location = str(adresse['lat']) + "," + str(adresse['lng'])
         detailed_cal = adresse['detailed_cal']
         #getting information of next FC match and personal calender if "detailed_cal = True"      
         wann_spielt_fc, my_cal = calendar(detailed_cal)
         weather = forecast_weather(location)
-        aqi_data = aqi(location)
+        lat = adresse['lat']
+        lng = adresse['lng']
+        aqi_data = aqi(lat, lng)
         moon_phase_de = moon(weather['moon_phase'])
         
         #plain text email as backup
