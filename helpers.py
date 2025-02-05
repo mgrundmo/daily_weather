@@ -11,6 +11,7 @@ def forecast_weather(location):
         response = requests.get(url)
         response.raise_for_status()  # Raise an error for HTTP error responses
         weather_data = response.json()
+        location_txt = weather_data["location"]["name"]        
         day_forecast = weather_data["forecast"]["forecastday"]
         date = day_forecast[0]["date"]
         temp_high = day_forecast[0]["day"]["maxtemp_c"]
@@ -53,7 +54,8 @@ def forecast_weather(location):
             "sunset": sunset,
             "moonrise": moonrise,
             "moonset": moonset,
-            "moon_phase": moon_phase
+            "moon_phase": moon_phase,
+            "location": location_txt
         }                                  
         return weather
     except requests.RequestException as e:
@@ -154,7 +156,7 @@ def useless_facts():
     useless_facts = response.json()
     return useless_facts
 
-def email_text(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts):
+def email_text(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
     if my_cal:
         text_a = f"Die nächsten Termine: {my_cal[0]}\n\
@@ -165,7 +167,7 @@ def email_text(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, las
     else:
         text_a = " "
 
-    text = f"Das Wetter in {location} am {weekday}\n\n\
+    text = f"Das Wetter in {weather['location']} am {weekday}\n\n\
     Hoechsttemperatur: {weather['temp_high']}C\n\
     Tiefsttemperatur:  {weather['temp_low']}C\n\
     Aussichten: {weather['condition']}\n\
@@ -189,7 +191,7 @@ def email_text(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, las
     Und sonst? {uselessfacts['text']}"
     return(text)
 
-def email_html(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts):
+def email_html(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
     #wann_spielt_fc = calendar()
     if my_cal:
@@ -248,7 +250,7 @@ def email_html(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, las
             </style>
         </head>
         <body>
-            <h2 style="text-align: center;">Das Wetter in '''+str(location)+''' für '''+str(weekday)+'''</h2>
+            <h2 style="text-align: center;">Das Wetter in '''+str(weather['location'])+''' für '''+str(weekday)+'''</h2>
             <div style="width:50%;border:1px solid grey; border-radius: 5px; margin: 5px">
                 <img src="https:'''+str(weather['icon'])+'''" alt="weather icon">
             </div>

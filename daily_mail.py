@@ -31,8 +31,8 @@ for adresse in adresses:
     for i in range(0, len(adresse), 4):
         receiver_email = adresse['email']
         #preparing geo data for weather api and request data
-        location = str(adresse['lat']) + "," + str(adresse['lng'])
-        weather = forecast_weather(location)      
+        geo_location = str(adresse['lat']) + "," + str(adresse['lng'])
+        weather = forecast_weather(geo_location)      
         moon_phase_de = moon(weather['moon_phase'])
 
         #getting information of next FC match and personal calender if "detailed_cal = True"  
@@ -46,15 +46,15 @@ for adresse in adresses:
         
         #prepare emails
         #plain text email as backup
-        text = email_text(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts)
+        text = email_text(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts)
         print(text)
 
         #html email as primary
-        html = email_html(weather, location, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts)
+        html = email_html(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts)
 
         #creating header of email
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = "Das Wetter für " +str(location) +" am " +str(weekday)
+        msg['Subject'] = "Das Wetter für " +str(weather['location']) +" am " +str(weekday)
         msg['From'] = email
         msg['To'] = receiver_email
 
