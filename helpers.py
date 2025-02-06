@@ -141,7 +141,7 @@ def moon(phase_en):
         "New Moon": "Neumond",
         "Waxing Crescent": "Zunehmende Sichel",
         "First Quarter": "Zunehmender Halbmond",
-        "Waxing Gibbous": "Zuhnemneder Dreiviertelmond",
+        "Waxing Gibbous": "Zunehmender Dreiviertelmond",
         "Full Moon": "Vollmond",
         "Waning Gibbous": "abnehmender Dreiviertelmond",
         "Last Quarter": "Abnehmender Halbmond",
