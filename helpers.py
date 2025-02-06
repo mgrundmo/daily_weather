@@ -107,11 +107,23 @@ def aqi(lat, lng):
     return None
 
 def last_fc():
-    url = f"https://api.openligadb.de/getlastmatchbyleagueteam/4755/65"
+    url_lg = f"https://api.openligadb.de/getlastmatchbyleagueteam/4755/65" #results for 2BL
+    url_pk = f"https://api.openligadb.de/getlastmatchbyleagueteam/4739/65" #results for pokal
     try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for HTTP error responses
-        fc_data = response.json()
+        response_lg = requests.get(url_lg)
+        response_pk = requests.get(url_pk)
+        response_lg.raise_for_status()  # Raise an error for HTTP error responses
+        response_pk.raise_for_status()  # Raise an error for HTTP error responses
+        fc_data_lg = response_lg.json()
+        fc_data_pk = response_pk.json()
+        date_time_lg = fc_data_lg['matchDateTime']
+        date_lg = datetime.strptime(date_time_lg, '%Y-%m-%dT%H:%M:%S')
+        date_time_pk = fc_data_pk['matchDateTime']
+        date_pk = datetime.strptime(date_time_pk, '%Y-%m-%dT%H:%M:%S')
+        if date_pk > date_lg:
+            fc_data = fc_data_pk
+        else:
+            fc_data = fc_data_lg
         date_time = fc_data['matchDateTime']
         date = date_time[:10]
         team1_logo = fc_data['team1']['teamIconUrl']
