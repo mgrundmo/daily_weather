@@ -14,8 +14,8 @@ email = "mgrundmo@gmail.com"
 adresses = [
     {'email': 'mgrundmo@gmx.de', 'lat': 50.891120, 'lng': 6.910415, 'detailed_cal': True},
     {'email': 'sissi-michael@gmx.de', 'lat': 43.542287, 'lng': 4.131755, 'detailed_cal': False},
-    {'email': 'philippcolonia@gmail.com', 'lat': 13.713353, 'lng': 100.505084, 'detailed_cal': False},
-    {'email': 'cedric.riechers@web.de','lat': 50.868795, 'lng': 7.004098, 'detailed_cal': False}
+   # {'email': 'philippcolonia@gmail.com', 'lat': 13.713353, 'lng': 100.505084, 'detailed_cal': False},
+   # {'email': 'cedric.riechers@web.de','lat': 50.868795, 'lng': 7.004098, 'detailed_cal': False}
 ]
 
 #getting todays date and weekday
@@ -23,7 +23,7 @@ today = date.today()
 weekday = today.strftime("%A, %d %B %Y")
 
 #getting result of last FC match
-last_match_fc = last_fc()
+last_match_fc, next_match_fc = last_fc()
 
 #getting useless facts
 uselessfacts = useless_facts()
@@ -37,8 +37,8 @@ for adresse in adresses:
         moon_phase_de = moon(weather['moon_phase'])
 
         #getting information of next FC match and personal calender if "detailed_cal = True"  
-        detailed_cal = adresse['detailed_cal']         
-        wann_spielt_fc, my_cal = calendar(detailed_cal)
+        #detailed_cal = adresse['detailed_cal']         
+        #wann_spielt_fc, my_cal = calendar(detailed_cal)
 
         #preparing geo data for AQI request and get data
         lat = adresse['lat']
@@ -47,11 +47,11 @@ for adresse in adresses:
         
         #prepare emails
         #plain text email as backup
-        text = email_text(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts)
+        text = email_text(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts)
         print(text)
 
         #html email as primary
-        html = email_html(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts)
+        html = email_html(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts)
 
         #creating header of email
         msg = MIMEMultipart('alternative')

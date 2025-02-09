@@ -109,13 +109,17 @@ def aqi(lat, lng):
 def last_fc():
     url_lg = f"https://api.openligadb.de/getlastmatchbyleagueteam/4755/65" #results for 2BL
     url_pk = f"https://api.openligadb.de/getlastmatchbyleagueteam/4739/65" #results for pokal
+    url_next = f"https://api.openligadb.de/getnextmatchbyleagueteam/4755/65" #next match for 2BL
     try:
         response_lg = requests.get(url_lg)
         response_pk = requests.get(url_pk)
+        response_next = requests.get(url_next)
         response_lg.raise_for_status()  # Raise an error for HTTP error responses
         response_pk.raise_for_status()  # Raise an error for HTTP error responses
+        response_next.raise_for_status()  # Raise an error for HTTP error responses
         fc_data_lg = response_lg.json()
         fc_data_pk = response_pk.json()
+        fc_data_next = response_next.json()
         date_time_lg = fc_data_lg['matchDateTime']
         date_lg = datetime.strptime(date_time_lg, '%Y-%m-%dT%H:%M:%S')
         date_time_pk = fc_data_pk['matchDateTime']
@@ -124,24 +128,35 @@ def last_fc():
             fc_data = fc_data_pk
         else:
             fc_data = fc_data_lg
-        date_time = fc_data['matchDateTime']
-        date = date_time[:10]
-        team1_logo = fc_data['team1']['teamIconUrl']
-        team1_name = fc_data['team1']['shortName']
-        team2_logo = fc_data['team2']['teamIconUrl']
-        team2_name = fc_data['team2']['shortName']
+        date_time_last = fc_data['matchDateTime']
+        date_last = date_time_last[:10]
+        team1_logo_last = fc_data['team1']['teamIconUrl']
+        team1_name_last = fc_data['team1']['shortName']
+        team2_logo_last = fc_data['team2']['teamIconUrl']
+        team2_name_last = fc_data['team2']['shortName']
         result1 = fc_data['matchResults'][1]['pointsTeam1']
         result2 = fc_data['matchResults'][1]['pointsTeam2']
         last_match_fc = {
-            "date": date,
-            "team1_logo": team1_logo,
-            "team1_name": team1_name,
-            "team2_logo": team2_logo,
-            "team2_name": team2_name,
+            "date": date_last,
+            "team1_logo": team1_logo_last,
+            "team1_name": team1_name_last,
+            "team2_logo": team2_logo_last,
+            "team2_name": team2_name_last,
             "result1": result1,
             "result2": result2
         }
-        return last_match_fc
+        date_time_next = fc_data_next['matchDateTime']
+        date_next = date_time_next[:10]
+        team1_name_next = fc_data_next['team1']['teamName']
+        team2_name_next = fc_data_next['team2']['teamName']
+        next_match_fc = {
+            "date": date_next,
+            "team1_name": team1_name_next,
+            "team2_name": team2_name_next,
+        }
+        next_fc = f"{next_match_fc['date']}                      {next_match_fc['team1_name']} : {next_match_fc['team2_name']}"
+        print(next_fc)
+        return last_match_fc, next_fc
     except requests.RequestException as e:
         print(f"Request error: {e}")
     except (KeyError, ValueError) as e:
@@ -168,8 +183,9 @@ def useless_facts():
     useless_facts = response.json()
     return useless_facts
 
-def email_text(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts):
+def email_text(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
+    '''
     if my_cal:
         text_a = f"Die nächsten Termine: {my_cal[0]}\n\
                           {my_cal[1]}\n\
@@ -178,7 +194,7 @@ def email_text(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc
                           {my_cal[4]}"
     else:
         text_a = " "
-
+    '''
     text = f"Das Wetter in {weather['location']} am {weekday}\n\n\
     Hoechsttemperatur: {weather['temp_high']}C\n\
     Tiefsttemperatur:  {weather['temp_low']}C\n\
@@ -193,7 +209,6 @@ def email_text(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc
     Mondaufgang:     {weather['moonrise']}\n\
     Monduntergang:   {weather['moonset']}\n\
     Mondphase: {moon_phase_de}\n\
-    {text_a}\n\
     Der FC spielt: {wann_spielt_fc}\n\
     Der FC hat gespielt:\
     {last_match_fc['date']}\
@@ -203,9 +218,10 @@ def email_text(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc
     Und sonst? {uselessfacts['text']}"
     return(text)
 
-def email_html(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc, uselessfacts):
+def email_html(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
     #wann_spielt_fc = calendar()
+    '''
     if my_cal:
         table_vis = 'table'
         entry_1 = my_cal[0]
@@ -217,6 +233,7 @@ def email_html(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc
         table_vis = 'table hidden'
         entry_1, entry_2, entry_3, entry_4, entry_5 = ' ', ' ', ' ', ' ', ' '
     print(table_vis)
+    '''
     html = '''\
     <!DOCTYPE html>
     <meta charset="UTF-8">
@@ -316,27 +333,6 @@ def email_html(weather, weekday, aqi_data, my_cal, wann_spielt_fc, last_match_fc
                     <td>Mondphase:</td>
                     <td>'''+str(moon_phase_de)+'''</td>
                 </tr>
-            </table>
-            <'''+str(table_vis)+'''>
-                <tr>
-                    <th>Die nächsten Termine</th>
-                </tr>
-                <tr>
-                    <td>'''+str(entry_1)+'''</td>
-                </tr>
-                <tr>
-                    <td>'''+str(entry_2)+'''</td>
-                </tr>
-                <tr>
-                    <td>'''+str(entry_3)+'''</td>
-                </tr>
-                <tr>
-                    <td>'''+str(entry_4)+'''</td>
-                </tr>
-                <tr>
-                    <td>'''+str(entry_5)+'''</td>
-                </tr>
-            </table>
             <h3>Wann spielt eigentlich der FC?</h3>
             <div class="marquee">
                 <p>'''+str(wann_spielt_fc)+'''</p>
