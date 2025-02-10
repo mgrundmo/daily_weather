@@ -155,7 +155,6 @@ def last_fc():
             "team2_name": team2_name_next,
         }
         next_fc = f"{next_match_fc['date']}                      {next_match_fc['team1_name']} : {next_match_fc['team2_name']}"
-        print(next_fc)
         return last_match_fc, next_fc
     except requests.RequestException as e:
         print(f"Request error: {e}")
@@ -220,20 +219,6 @@ def email_text(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, useles
 
 def email_html(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
     moon_phase_de = moon(weather['moon_phase'])
-    #wann_spielt_fc = calendar()
-    '''
-    if my_cal:
-        table_vis = 'table'
-        entry_1 = my_cal[0]
-        entry_2 = my_cal[1]
-        entry_3 = my_cal[2]
-        entry_4 = my_cal[3]
-        entry_5 = my_cal[4]
-    else:
-        table_vis = 'table hidden'
-        entry_1, entry_2, entry_3, entry_4, entry_5 = ' ', ' ', ' ', ' ', ' '
-    print(table_vis)
-    '''
     html = '''\
     <!DOCTYPE html>
     <meta charset="UTF-8">
@@ -244,7 +229,7 @@ def email_html(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, useles
                 body {
                     font-family: Verdana, sans-serif;
                 }
-                table, th, td {
+                table, td {
                     border: 1px solid grey;
                     border-radius: 5px;
                     padding: 5px;
@@ -308,9 +293,9 @@ def email_html(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, useles
                 <tr>
                     <td>Luftqualität (AQI):</td>
                     <td style="color: '''+str(aqi_data[3])+'''; background-color: '''+str(aqi_data[2])+''';">'''+str(aqi_data[0])+'''</td>
-
+                </tr>
             </table>
-            <table>
+            <table>            
                 <tr>
                     <td>Sonnenaufgang:</td>
                     <td>'''+str(weather['sunrise'])+'''</td>
@@ -333,6 +318,7 @@ def email_html(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, useles
                     <td>Mondphase:</td>
                     <td>'''+str(moon_phase_de)+'''</td>
                 </tr>
+            </table>
             <h3>Wann spielt eigentlich der FC?</h3>
             <div class="marquee">
                 <p>'''+str(wann_spielt_fc)+'''</p>
