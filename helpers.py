@@ -146,7 +146,7 @@ def last_fc():
             "result2": result2
         }
         date_time_next = fc_data_next['matchDateTime']
-        date_next = date_time_next[:10]
+        date_next = date_time_next[:10] + " / " +date_time_next[11:16]
         team1_name_next = fc_data_next['team1']['teamName']
         team2_name_next = fc_data_next['team2']['teamName']
         next_match_fc = {
@@ -183,17 +183,9 @@ def useless_facts():
     return useless_facts
 
 def email_text(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
+    
     moon_phase_de = moon(weather['moon_phase'])
-    '''
-    if my_cal:
-        text_a = f"Die nächsten Termine: {my_cal[0]}\n\
-                          {my_cal[1]}\n\
-                          {my_cal[2]}\n\
-                          {my_cal[3]}\n\
-                          {my_cal[4]}"
-    else:
-        text_a = " "
-    '''
+
     text = f"Das Wetter in {weather['location']} am {weekday}\n\n\
     Hoechsttemperatur: {weather['temp_high']}C\n\
     Tiefsttemperatur:  {weather['temp_low']}C\n\
