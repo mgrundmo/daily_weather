@@ -2,6 +2,20 @@ import requests
 
 from datetime import datetime
 
+def jacquie_jokes():
+    url = f"https://witzapi.de/api/joke/?limit=1&language=de"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        random_joke = response.json()
+        joke = random_joke[0]["text"]
+        return joke
+    except requests.RequestException as e:
+        print(f"Request error: {e}")
+    except (KeyError, ValueError) as e:
+        print(f"Data parsing error: {e}")
+    return None
+
 def forecast_weather(location):
     """Look up weather data for location."""
     key = "b97f0c7e03084663a3d81708242803"
@@ -181,7 +195,7 @@ def useless_facts():
     useless_facts = response.json()
     return useless_facts
 
-def email_text(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
+def email_text(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts, random_joke):
     
     moon_phase_de = moon(weather['moon_phase'])
 
@@ -205,10 +219,11 @@ def email_text(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, useles
     {last_match_fc['team1_name']}\
     {last_match_fc['result1']}:{last_match_fc['result2']}\
     {last_match_fc['team2_name']}\n\
-    Und sonst? {uselessfacts['text']}"
+    Und sonst? {uselessfacts['text']}\n\
+    Flachwitz des Tages: {random_joke}"
     return(text)
 
-def email_html(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts):
+def email_html(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, uselessfacts, random_joke):
     moon_phase_de = moon(weather['moon_phase'])
     html = '''\
     <!DOCTYPE html>
@@ -329,6 +344,8 @@ def email_html(weather, weekday, aqi_data, wann_spielt_fc, last_match_fc, useles
             </table>
             <h3>Und sonst?</h3>
             <p>'''+str(uselessfacts['text'])+'''</p>
+            <h3>Jacqueline's Flachwitz:</h3>
+            <p>'''+str(random_joke)+'''</p>
         </body>
     </html>    
     '''

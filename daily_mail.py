@@ -4,7 +4,7 @@ from datetime import date
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from helpers import forecast_weather, moon, email_text, email_html, aqi, last_fc, useless_facts
+from helpers import forecast_weather, moon, email_text, email_html, aqi, last_fc, useless_facts, jacquie_jokes
 
 #sender email
 email = "mgrundmo@gmail.com"
@@ -14,7 +14,8 @@ adresses = [
     {'email': 'mgrundmo@gmx.de', 'lat': 50.891120, 'lng': 6.910415, 'detailed_cal': True},
     {'email': 'sissi-michael@gmx.de', 'lat': 16.879927, 'lng': -24.981767, 'detailed_cal': False},
     {'email': 'philippcolonia@gmail.com', 'lat': 50.948833, 'lng': 6.926568, 'detailed_cal': False},
-    {'email': 'cedric.riechers@web.de','lat': 50.868795, 'lng': 7.004098, 'detailed_cal': False}
+    {'email': 'cedric.riechers@web.de','lat': 50.868795, 'lng': 7.004098, 'detailed_cal': False},
+    {'email': 'riechersj@web.de','lat': 50.868795, 'lng': 7.004098, 'detailed_cal': False}
 ]
 
 #getting todays date and weekday
@@ -26,6 +27,7 @@ last_match_fc, next_match_fc = last_fc()
 
 #getting useless facts
 uselessfacts = useless_facts()
+random_joke = jacquie_jokes()
 
 for adresse in adresses:
     for i in range(0, len(adresse), 4):
@@ -46,11 +48,11 @@ for adresse in adresses:
         
         #prepare emails
         #plain text email as backup
-        text = email_text(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts)
+        text = email_text(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts, random_joke)
         print(text)
 
         #html email as primary
-        html = email_html(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts)
+        html = email_html(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts, random_joke)
 
         #creating header of email
         msg = MIMEMultipart('alternative')
