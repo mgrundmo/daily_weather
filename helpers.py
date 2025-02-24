@@ -1,7 +1,6 @@
 import requests
 
 from datetime import datetime
-from quickstart import calendar
 
 def forecast_weather(location):
     """Look up weather data for location."""

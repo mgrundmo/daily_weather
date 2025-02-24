@@ -5,7 +5,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from helpers import forecast_weather, moon, email_text, email_html, aqi, last_fc, useless_facts
-from quickstart import calendar
 
 #sender email
 email = "mgrundmo@gmail.com"
