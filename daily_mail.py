@@ -1,21 +1,26 @@
+import os
 import smtplib
 
 from datetime import date
+from dotenv import load_dotenv
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from helpers import forecast_weather, moon, email_text, email_html, aqi, last_fc, useless_facts, jacquie_jokes
 
+load_dotenv()
+
 #sender email
-email = "mgrundmo@gmail.com"
+email = os.environ.get('MAILUSER')
+password = os.environ.get('PASSWORD')
 
 # list of adresses
 adresses = [
-    {'email': 'mgrundmo@gmx.de', 'lat': 50.891120, 'lng': 6.910415, 'detailed_cal': True},
-    {'email': 'sissi-michael@gmx.de', 'lat': 16.879927, 'lng': -24.981767, 'detailed_cal': False},
-    {'email': 'philippcolonia@gmail.com', 'lat': 50.948833, 'lng': 6.926568, 'detailed_cal': False},
-    {'email': 'cedric.riechers@web.de','lat': 50.868795, 'lng': 7.004098, 'detailed_cal': False},
-    {'email': 'riechersj@web.de','lat': 50.868795, 'lng': 7.004098, 'detailed_cal': False}
+    {'email': os.environ.get('EMAIL1'), 'lat': os.environ.get('LAT1'), 'lng': os.environ.get('LNG1')},
+    {'email': os.environ.get('EMAIL2'), 'lat': os.environ.get('LAT2'), 'lng': os.environ.get('LNG2')},
+    {'email': os.environ.get('EMAIL3'), 'lat': os.environ.get('LAT3'), 'lng': os.environ.get('LNG3')},
+    {'email': os.environ.get('EMAIL4'), 'lat': os.environ.get('LAT4'), 'lng': os.environ.get('LNG4')},
+    {'email': os.environ.get('EMAIL5'), 'lat': os.environ.get('LAT5'), 'lng': os.environ.get('LNG5')}
 ]
 
 #getting todays date and weekday
@@ -70,7 +75,7 @@ for adresse in adresses:
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.ehlo()
         server.starttls()
-        server.login(email, "xmtnrolasszlaihl")
+        server.login(email, password)
         server.sendmail(email, receiver_email, msg.as_string())
         print("Email has been sent to " + receiver_email + "\n")
 server.quit()
