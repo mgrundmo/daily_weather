@@ -1,0 +1,2 @@
+# Damit die .env datei nicht mit gepusht wird
+.env
