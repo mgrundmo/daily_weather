@@ -34,49 +34,45 @@ last_match_fc, next_match_fc = last_fc()
 uselessfacts = useless_facts()
 random_joke = jacquie_jokes()
 
-for adresse in adresses:
-    for i in range(0, len(adresse), 4):
-        receiver_email = adresse['email']
-        #preparing geo data for weather api and request data
-        geo_location = str(adresse['lat']) + "," + str(adresse['lng'])
-        weather = forecast_weather(geo_location)      
-        moon_phase_de = moon(weather['moon_phase'])
+for adresse in adresses: 
+    receiver_email = adresse['email']
+    
+    #preparing geo data for weather api and request data
+    geo_location = str(adresse['lat']) + "," + str(adresse['lng'])
+    weather = forecast_weather(geo_location)      
+    moon_phase_de = moon(weather['moon_phase'])
 
-        #getting information of next FC match and personal calender if "detailed_cal = True"  
-        #detailed_cal = adresse['detailed_cal']         
-        #wann_spielt_fc, my_cal = calendar(detailed_cal)
-
-        #preparing geo data for AQI request and get data
-        lat = adresse['lat']
-        lng = adresse['lng']
-        aqi_data = aqi(lat, lng)
+    #preparing geo data for AQI request and get data
+    lat = adresse['lat']
+    lng = adresse['lng']
+    aqi_data = aqi(lat, lng)
         
-        #prepare emails
-        #plain text email as backup
-        text = email_text(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts, random_joke)
-        print(text)
+    #prepare emails
+    #plain text email as backup
+    text = email_text(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts, random_joke)
+    print(text)
 
-        #html email as primary
-        html = email_html(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts, random_joke)
+    #html email as primary
+    html = email_html(weather, weekday, aqi_data, next_match_fc, last_match_fc, uselessfacts, random_joke)
 
-        #creating header of email
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = "Das Wetter für " +str(weather['location']) +" am " +str(weekday)
-        msg['From'] = email
-        msg['To'] = receiver_email
+    #creating header of email
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = "Das Wetter für " +str(weather['location']) +" am " +str(weekday)
+    msg['From'] = email
+    msg['To'] = receiver_email
 
-        part1 = MIMEText(text, 'plain')
-        part2 = MIMEText(html, 'html')
+    part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
 
-        msg.attach(part1)
-        msg.attach(part2)
-        #'''
-        #sending email
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.ehlo()
-        server.starttls()
-        server.login(email, password)
-        server.sendmail(email, receiver_email, msg.as_string())
-        print("Email has been sent to " + receiver_email + "\n")
-server.quit()
-#'''
+    msg.attach(part1)
+    msg.attach(part2)
+    '''
+    #sending email
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.ehlo()
+    server.starttls()
+    server.login(email, password)
+    server.sendmail(email, receiver_email, msg.as_string())
+    server.quit()
+'''
+print("Email has been sent to " + receiver_email + "\n")
